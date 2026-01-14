@@ -1,6 +1,6 @@
 [submodule "src/GVP-MREP"]
 	path = src/GVP-MREP
-	url = https://github.com/NKU-MobFly-Robotics/GVP-MREP.git
+	url = https://github.com/hhhhhh-cha/GVP-MREP.git
 [submodule "src/catkin_simple"]
 	path = src/catkin_simple
 	url = https://github.com/catkin/catkin_simple.git
