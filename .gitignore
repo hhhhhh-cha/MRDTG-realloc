@@ -1,0 +1,15 @@
+# catkin / ROS workspace generated
+.catkin_workspace
+build/
+devel/
+install/
+log/
+
+# CMake generated (in case)
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+CTestTestfile.cmake
+Testing/
+catkin_make.cache
