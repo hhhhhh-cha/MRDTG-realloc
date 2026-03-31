@@ -11,10 +11,19 @@ void SwarmDataManager::init(ros::NodeHandle &nh, ros::NodeHandle &nh_private){
     nh_private.param(ns + "/Exp/global_comm_freq", global_comm_intv_, 1.0);
     nh_private.param(ns + "/Exp/local_dist_thresh", local_dist_thresh_, 5.0);
     nh_private.param(ns + "/Exp/use_answer", use_answer_, false);
+    
+    // Step-1 comm constraint (baseline/ablation)
+    nh_private.param(ns + "/Exp/global_broadcast", global_broadcast_, true);
+    // Alias: allow using /Exp/comm_range in yaml/launch without breaking existing configs.
+    nh_private.param(ns + "/Exp/comm_range", local_dist_thresh_, local_dist_thresh_);
+
+    
     nh_private.param(ns + "/Exp/wait_t", wait_t_, 3.0);
     nh_private.param(ns + "/Exp/show_swarm_traj", show_swarm_traj_, false);
     nh_private.param(ns + "/Exp/statistic", statistic_, false);
     nh_private.param(ns + "/Exp/finish_thresh", finish_thresh_, 0.5);
+
+
 
     if(statistic_) CS_.init(nh, nh_private);
     req_flag_ = false;
@@ -138,6 +147,7 @@ void SwarmDataManager::PoseTimerCallback(const ros::TimerEvent &e){
     }
 }
 
+
 void SwarmDataManager::TrajTimerCallback(const ros::TimerEvent &e){
     for(list<uint8_t>::iterator uav_it = traj_msg_.first.begin(); uav_it != traj_msg_.first.end(); uav_it++){
         if(*uav_it == 0 || IsEucLocal(Poses_[self_id_ - 1], Poses_[*uav_it - 1])){
@@ -191,6 +201,8 @@ void SwarmDataManager::DTGTimerCallback(const ros::TimerEvent &e){
         DTG_pub_.publish(DTGB_msg);
     flags_ &= 251;
 }
+
+
 
 // void DTGTimerCallback(const ros::TimerEvent &e);
 // void JobTimerCallback(const ros::TimerEvent &e);

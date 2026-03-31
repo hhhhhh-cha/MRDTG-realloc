@@ -154,6 +154,8 @@ public:
     uint32_t vp_num_;
     double local_comm_intv_, global_comm_intv_;
     double local_dist_thresh_;
+    
+
 
     bool show_swarm_traj_;
     ros::Publisher show_pub_;
