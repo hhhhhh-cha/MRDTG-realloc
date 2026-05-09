@@ -737,8 +737,14 @@ void Murder::Stay(const Eigen::Vector4d &pose){
 }
 
 int Murder::Replan(const bool &new_target, const bool &ignore_duration){
+    ROS_ERROR("==== REPLAN NEW BUILD MARKER ====");
     double cur_t = ros::WallTime::now().toSec();
-    if(!ignore_duration && cur_t - traj_start_t_ < exc_duration_) return 0;
+    // 新加的
+    HandleDeadEvent();
+    ROS_ERROR("[MURDER %d] Replan AFTER HandleDeadEvent: target_f_id_=%d target_v_id_=%d replan_t_=%.3f traj_end_t_=%.3f now=%.3f",
+          SDM_.self_id_, target_f_id_, target_v_id_, replan_t_, traj_end_t_, cur_t);
+   
+          if(!ignore_duration && cur_t - traj_start_t_ < exc_duration_) return 0;
     Eigen::Vector4d target_pose;
     Eigen::Vector3d ps, vs, as, pe, ve, ae;
     double ys, yds, ydds, ye, yde, ydde;
@@ -749,6 +755,9 @@ int Murder::Replan(const bool &new_target, const bool &ignore_duration){
     /* replan , dead_target, force go to a new target or target vp dead, change to local or global mode */
     if(!dead_target || cur_t > replan_t_ || new_target || 
         !(FG_.GetVp(target_f_id_, target_v_id_, target_pose) && FG_.f_grid_[target_f_id_].local_vps_[target_v_id_] == 1)){
+        // 新加的
+        ROS_ERROR("[MURDER %d] Replan RETURN 1: need new plan, dead_target=%d cur_t=%.3f replan_t_=%.3f target_f_id_=%d target_v_id_=%d",
+          SDM_.self_id_, int(dead_target), cur_t, replan_t_, target_f_id_, target_v_id_);
         return 1;
         // list<int> local_f;
         // MDTG_.GetAllLocalFroVps(local_f);
